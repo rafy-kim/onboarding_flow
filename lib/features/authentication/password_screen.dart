@@ -51,11 +51,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void _onSubmit() {
     if (!_isPasswordValid()) return;
-    Navigator.push(
-      context,
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const InterestsScreen(),
       ),
+      (route) => false,
     );
   }
 
@@ -70,117 +70,120 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => _onTapCancel(context),
-          child: Container(
-            alignment: Alignment.center,
-            child: const FaIcon(FontAwesomeIcons.arrowLeft),
+    return GestureDetector(
+      onTap: _onScaffoldTap,
+      child: Scaffold(
+        appBar: AppBar(
+          // leading: GestureDetector(
+          //   onTap: () => _onTapCancel(context),
+          //   child: Container(
+          //     alignment: Alignment.center,
+          //     child: const FaIcon(FontAwesomeIcons.arrowLeft),
+          //   ),
+          // ),
+          title: FaIcon(
+            FontAwesomeIcons.twitter,
+            color: Theme.of(context).primaryColor,
+            size: 30,
           ),
         ),
-        title: FaIcon(
-          FontAwesomeIcons.twitter,
-          color: Theme.of(context).primaryColor,
-          size: 30,
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "You'll need a password",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Gaps.v28,
-            Text(
-              "Make sure it's 8 characters or more.",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Gaps.v32,
-            TextField(
-              controller: _passwordController,
-              // onSubmitted: (value) => ,
-              onEditingComplete: _onSubmit,
-              obscureText: _obscureText,
-              obscuringCharacter: ' ',
-              autocorrect: false,
-              decoration: InputDecoration(
-                // prefixIcon: const Icon(Icons.ac_unit),
-                // suffixIcon: const Icon(Icons.add_business),
-                suffix: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // GestureDetector(
-                    //   onTap: _onClearTap,
-                    //   child: FaIcon(
-                    //     FontAwesomeIcons.solidCircleXmark,
-                    //     color: Colors.grey.shade500,
-                    //     size: Sizes.size20,
-                    //   ),
-                    // ),
-                    // Gaps.h16,
-                    GestureDetector(
-                      onTap: _toogleObscureText,
-                      child: FaIcon(
-                        _obscureText
-                            ? FontAwesomeIcons.eye
-                            : FontAwesomeIcons.eyeSlash,
-                        color: Colors.grey.shade500,
-                        size: Sizes.size20,
+        body: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "You'll need a password",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              Gaps.v28,
+              Text(
+                "Make sure it's 8 characters or more.",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Gaps.v32,
+              TextField(
+                controller: _passwordController,
+                // onSubmitted: (value) => ,
+                onEditingComplete: _onSubmit,
+                obscureText: _obscureText,
+                obscuringCharacter: ' ',
+                autocorrect: false,
+                decoration: InputDecoration(
+                  // prefixIcon: const Icon(Icons.ac_unit),
+                  // suffixIcon: const Icon(Icons.add_business),
+                  suffix: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // GestureDetector(
+                      //   onTap: _onClearTap,
+                      //   child: FaIcon(
+                      //     FontAwesomeIcons.solidCircleXmark,
+                      //     color: Colors.grey.shade500,
+                      //     size: Sizes.size20,
+                      //   ),
+                      // ),
+                      // Gaps.h16,
+                      GestureDetector(
+                        onTap: _toogleObscureText,
+                        child: FaIcon(
+                          _obscureText
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.eyeSlash,
+                          color: Colors.grey.shade500,
+                          size: Sizes.size20,
+                        ),
                       ),
+                      if (_isPasswordValid())
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Gaps.h16,
+                            FaIcon(
+                              FontAwesomeIcons.solidCircleCheck,
+                              color: Colors.green[400],
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                  labelText: "Password",
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  )),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  )),
+                ),
+                cursorColor: Theme.of(context).primaryColor,
+              ),
+              const Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 10,
                     ),
-                    if (_isPasswordValid())
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Gaps.h16,
-                          FaIcon(
-                            FontAwesomeIcons.solidCircleCheck,
-                            color: Colors.green[400],
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-                labelText: "Password",
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                  color: Colors.grey.shade400,
-                )),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                  color: Colors.grey.shade400,
-                )),
-              ),
-              cursorColor: Theme.of(context).primaryColor,
-            ),
-            const Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20.0,
-                    horizontal: 10,
                   ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: _onSubmit,
-                  child: FormButton(
-                    isLarge: true,
-                    disabled: !_isPasswordValid(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: _onSubmit,
+                    child: FormButton(
+                      isLarge: true,
+                      disabled: !_isPasswordValid(),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

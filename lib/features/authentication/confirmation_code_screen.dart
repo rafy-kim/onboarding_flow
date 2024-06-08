@@ -36,12 +36,11 @@ class _ConfirmationCodeScreenState extends State<ConfirmationCodeScreen> {
     }
 
     // print(formData);
-    Navigator.push(
-      context,
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const PasswordScreen(),
-        // fullscreenDialog: true,
       ),
+      (route) => false,
     );
   }
 
